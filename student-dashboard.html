@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Home - Mess Card</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="sidebar" id="sidebar">
+        <button class="close-btn" onclick="toggleMenu()">×</button>
+        <a href="student-dashboard.html">🏠 Dashboard</a>
+        <a href="qrscan.html">📷 Scan QR</a>
+        <a href="student-profile.html">👤 My Profile</a>
+        <a href="student-login.html" style="margin-top: 20px; color: #ff6b6b;">🚪 Logout</a>
+    </nav>
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+    <header>
+        <nav class="navbar">
+            <button class="menu-btn" onclick="toggleMenu()">☰</button>
+            <a href="../index.html" class="logo">Mess Card</a>
+            <ul class="nav-links">
+                <li><a href="student-dashboard.html">Dashboard</a></li>
+                <li><a href="qrscan.html">Scan QR</a></li>
+                <li><a href="student-profile.html">My Profile</a></li>
+                <li><a href="student-login.html" style="color: #dc2626;">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main class="dashboard">
+        <h2 style="color: #183b56;">Account Overview</h2>
+        <div class="dashboard-cards">
+            <div class="dash-card">
+                <h3>Wallet Balance</h3>
+                <h2>₹450</h2>
+            </div>
+            <div class="dash-card">
+                <h3>Plan Remaining</h3>
+                <h2>24 <small style="font-size: 1rem; color: #ccc;">Days</small></h2>
+            </div>
+        </div>
+
+        <section class="auth-container" style="margin-top: 20px; margin-bottom: 25px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+            <h3 style="color: #183b56; text-align: center;">Top-up & Renew</h3>
+            <p style="color: #667085; text-align: center; font-size: 0.9rem;">Select a full-time monthly meal plan or enter a custom wallet top-up.</p>
+
+            <div class="plan-options">
+                <button type="button" class="plan-btn" onclick="selectPlan(this, 3400, 'Full-Time Monthly (Veg)')">
+                    <span class="plan-title">🥬 Monthly Plan (Veg)</span>
+                    <span class="plan-price">₹3,400</span>
+                </button>
+                <button type="button" class="plan-btn" onclick="selectPlan(this, 3800, 'Full-Time Monthly (Non-Veg)')">
+                    <span class="plan-title">🍗 Monthly Plan (Non-Veg)</span>
+                    <span class="plan-price">₹3,800</span>
+                </button>
+            </div>
+
+            <form onsubmit="handlePayment(event)">
+                <input type="number" id="amountInput" placeholder="Enter amount (₹)" min="1" required oninput="clearPlanSelection()">
+                <button type="submit" class="btn primary" id="payBtn">Proceed to Pay</button>
+            </form>
+        </section>
+
+        <div style="text-align: center; margin-top: 25px;">
+            <a href="qrscan.html" class="btn primary btn-inline" style="background-color: #183b56;">📷 Scan Mess QR Counter</a>
+        </div>
+    </main>
+
+    <script>
+        let selectedPlanName = '';
+
+        function toggleMenu() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('overlay').classList.toggle('active');
+        }
+
+        function selectPlan(btn, amount, planName) {
+            document.querySelectorAll('.plan-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            selectedPlanName = planName;
+
+            const input = document.getElementById('amountInput');
+            input.value = amount;
+            document.getElementById('payBtn').textContent = `Renew ${planName} (₹${amount})`;
+        }
+
+        function clearPlanSelection() {
+            document.querySelectorAll('.plan-btn').forEach(b => b.classList.remove('active'));
+            selectedPlanName = '';
+            document.getElementById('payBtn').textContent = 'Proceed to Pay';
+        }
+
+        function handlePayment(event) {
+            event.preventDefault();
+            const amount = document.getElementById('amountInput').value;
+            const label = selectedPlanName ? `${selectedPlanName} - ₹${amount}` : `Wallet Top-up - ₹${amount}`;
+            alert(`Redirecting to payment gateway for ${label}...`);
+        }
+    </script>
+</body>
+</html>
